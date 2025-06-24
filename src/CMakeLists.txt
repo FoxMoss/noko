@@ -1,5 +1,5 @@
 add_executable(noko
-  main.c
+  main.cc
 )
 
 find_package(X11 REQUIRED)
