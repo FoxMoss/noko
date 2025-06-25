@@ -1,6 +1,8 @@
 #include "utils.h"
 #include "SDL3/SDL_surface.h"
+#include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #define OUTLINE_SIZE 2
 
@@ -27,7 +29,7 @@ SDL_FRect cover_rect(int texture_width, int texture_height, int width,
   return dest_rect;
 }
 
-SDL_Surface *generate_font_surface(TTF_Font *font, char *text) {
+SDL_Surface *generate_font_surface(TTF_Font *font, const char *text) {
   TTF_Font *font_outline = TTF_CopyFont(font);
   TTF_SetFontOutline(font_outline, OUTLINE_SIZE);
 
@@ -44,4 +46,19 @@ SDL_Surface *generate_font_surface(TTF_Font *font, char *text) {
   SDL_DestroySurface(fg_surface);
   TTF_CloseFont(font_outline);
   return bg_surface;
+}
+
+const char *months_map[] = {"January",   "February", "March",    "April",
+                            "May",       "June",     "July",     "August",
+                            "September", "October",  "November", "December"};
+
+void sntime(char *output, size_t max_len) {
+  time_t rawtime;
+  struct tm *timeinfo;
+
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+
+  snprintf(output, max_len, "%s %d, %d:%02d", months_map[timeinfo->tm_mon],
+           timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min);
 }

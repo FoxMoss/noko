@@ -1,6 +1,9 @@
 add_executable(noko-desktop
-  main.c
-  utils.c
+  main.cc
+  utils.cc
+  homescreen.cc
+  clay.c
+  sdl_clay.c
 )
 include(FetchContent)
 FetchContent_Declare(
@@ -25,7 +28,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sdl_ttf)
 
+set(CLAY_INCLUDE_ALL_EXAMPLES OFF)
+FetchContent_Declare(
+  clay
+  GIT_REPOSITORY https://github.com/nicbarker/clay
+  GIT_TAG        281f961e3d7272e5627a7618aedddd70faf04668
+)
+FetchContent_MakeAvailable(clay)
+
 target_link_libraries(noko-desktop PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
+target_include_directories(noko-desktop PRIVATE ${clay_SOURCE_DIR})
 
 add_custom_command(TARGET noko-desktop POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
