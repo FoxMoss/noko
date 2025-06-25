@@ -5,6 +5,18 @@ add_executable(noko-desktop
   clay.c
   sdl_clay.c
 )
+if (EMSCRIPTEN)
+  target_compile_options(noko-desktop PRIVATE -DEMSCRIPTEN)
+  target_link_options(noko-desktop PRIVATE --shell-file "${CMAKE_CURRENT_SOURCE_DIR}/../webport/index.html" --preload-file "${CMAKE_CURRENT_SOURCE_DIR}/../public@/")
+  set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
+  set(SDLTTF_VENDORED ON)
+  set(SDLIMAGE_VENDORED ON)
+  set(SDLIMAGE_AVIF OFF)	# disable formats we don't use to make the build faster and smaller.
+  set(SDLIMAGE_BMP OFF)
+  set(SDLIMAGE_JPEG OFF)
+  set(SDLIMAGE_WEBP OFF)
+endif()
+
 include(FetchContent)
 FetchContent_Declare(
   sdl
@@ -35,6 +47,7 @@ FetchContent_Declare(
   GIT_TAG        281f961e3d7272e5627a7618aedddd70faf04668
 )
 FetchContent_MakeAvailable(clay)
+
 
 target_link_libraries(noko-desktop PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
 target_include_directories(noko-desktop PRIVATE ${clay_SOURCE_DIR})

@@ -1,17 +1,26 @@
 #pragma once
 
+struct ProgState;
+class HomeScreen;
+
 #include "SDL3_ttf/SDL_ttf.h"
-#include "clay.h"
-#include "homscreen.h"
+#include "homescreen.h"
 #include "sdl_clay.h"
+
+#ifndef EMSCRIPTEN
 #define PUBLIC_FOLDER "../public/"
+#else
+#define PUBLIC_FOLDER "./"
+#endif
 
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
-static SDL_Texture *wallpaper_texture = NULL;
-static TTF_Font *lato_regular = NULL;
-static HomeScreen *home_screen;
-static Clay_SDL3RendererData render_data;
+struct ProgState {
+  SDL_Window *window = NULL;
+  SDL_Renderer *renderer = NULL;
+  SDL_Texture *wallpaper_texture = NULL;
+  TTF_Font *lato_regular = NULL;
+  HomeScreen *home_screen;
+  Clay_SDL3RendererData render_data;
 
-static int width = 640;
-static int height = 480;
+  int width;
+  int height;
+};
