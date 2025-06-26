@@ -7,7 +7,7 @@ add_executable(noko-desktop
 )
 if (EMSCRIPTEN)
   target_compile_options(noko-desktop PRIVATE -DEMSCRIPTEN)
-  target_link_options(noko-desktop PRIVATE --shell-file "${CMAKE_CURRENT_SOURCE_DIR}/../webport/index.html" --preload-file "${CMAKE_CURRENT_SOURCE_DIR}/../public@/")
+  target_link_options(noko-desktop PRIVATE --shell-file "${CMAKE_CURRENT_SOURCE_DIR}/../webport/index.html" --preload-file "${CMAKE_CURRENT_SOURCE_DIR}/../public@/" -sINITIAL_MEMORY=70254592)
   set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
   set(SDLTTF_VENDORED ON)
   set(SDLIMAGE_VENDORED ON)

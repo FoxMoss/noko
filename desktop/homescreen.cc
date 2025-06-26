@@ -106,7 +106,9 @@ HomeScreen::HomeScreen(ProgState *state,
     to_t9(app.name, &output);
     TrieNode *node = trie_fillout_path(app_name_root, output);
     trie_appened_child(node, trie_create_word({(char *)app.name, 1}));
+    free(output);
   }
+  search_text[0] = 0;
 
   blank_app_texture =
       IMG_LoadTexture(state->renderer, PUBLIC_FOLDER "blank_app.png");
