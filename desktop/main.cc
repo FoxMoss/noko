@@ -41,7 +41,11 @@ void HandleClayErrors(Clay_ErrorData errorData) {
 }
 
 bool show_app = false;
-static void display_app(const char *app_name) { show_app = true; }
+const char *app_name = NULL;
+static void display_app(const char *c_app_name) {
+  show_app = true;
+  app_name = c_app_name;
+}
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
   SDL_SetAppMetadata("Noko", "1.0", "com.foxmoss.noko");
@@ -165,7 +169,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
   state->home_screen->render(state);
 
   if (show_app) {
-    auto layout = HomeScreen::app_demo(state);
+    auto layout = HomeScreen::app_demo(state, (char *)app_name);
     SDL_Clay_RenderClayCommandsProxy(&state->render_data, &layout);
   }
 

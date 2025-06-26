@@ -48,8 +48,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(clay)
 
+set(BUILD_LIB ON)
+FetchContent_Declare(
+  libt9
+  GIT_REPOSITORY https://github.com/FoxMoss/libt9
+  GIT_TAG        7307f13d2b0e1c1a33841da75926743019f3bbf6
+)
+FetchContent_MakeAvailable(libt9)
 
-target_link_libraries(noko-desktop PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
+target_link_libraries(noko-desktop PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf t9)
 target_include_directories(noko-desktop PRIVATE ${clay_SOURCE_DIR})
 
 add_custom_command(TARGET noko-desktop POST_BUILD
