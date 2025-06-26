@@ -1,7 +1,19 @@
 # Noko
-A desktop enviroment for keypads and mobile devices. For typing in search it is [T9](https://en.wikipedia.org/wiki/T9_%28predictive_text%29) based, for usage see the Wikipedia page.
+A Linux desktop environment for mobile devices with a [3x4 number key](https://en.wikipedia.org/wiki/Telephone_keypad) matrix. This is to be used for opening & managing apps.
+
+The web demo of the desktop environment is available at [foxmoss.github.io/noko/](https://foxmoss.github.io/noko/), this does not support standard desktop apps as it wouldn't be feasible to port X11 and your traditional desktop apps to WASM without significant overhead.
 
 ## Controls
+
+### Typing
+
+For typing in search it is [T9](https://en.wikipedia.org/wiki/T9_%28predictive_text%29) based where one letter corresponds to one number. See the cheatsheet below:
+
+![cheatsheet](cheatsheet.png)
+
+So to type "Settings" would be "73884647".
+
+### Options
 
 | Key | Usage |
 | -------------- | --------------- |
