@@ -1,7 +1,16 @@
 
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_keycode.h"
+#include "SDL3/SDL_stdinc.h"
+#include <cerrno>
+#include <csignal>
 #include <cstddef>
+#include <cstdlib>
+#include <pthread.h>
+#include <spawn.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #define SDL_MAIN_USE_CALLBACKS 1
 #include <SDL3/SDL_main.h>
 
@@ -40,11 +49,24 @@ void HandleClayErrors(Clay_ErrorData errorData) {
   printf("%s", errorData.errorText.chars);
 }
 
+#ifdef EMSCRIPTEN
 bool show_app = false;
+#endif
+
 const char *app_name = NULL;
 static void display_app(const char *c_app_name) {
+#ifdef EMSCRIPTEN
   show_app = true;
   app_name = c_app_name;
+#else
+
+  int pid = fork();
+  if (pid == 0) {
+    char *args[] = {(char *)c_app_name, NULL};
+    execv(c_app_name, args);
+    exit(1);
+  }
+#endif
 }
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
@@ -127,10 +149,12 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
         true, (Clay_Vector2){event->wheel.x, event->wheel.y}, 0.01f);
     break;
   case SDL_EVENT_KEY_DOWN:
+#ifdef EMSCRIPTEN
     if (show_app && event->key.key == SDLK_KP_PLUS)
       show_app = false;
     if (show_app)
       break;
+#endif
 
     state->home_screen->key_event(event);
     break;
@@ -168,10 +192,12 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
   state->home_screen->render(state);
 
+#ifdef EMSCRIPTEN
   if (show_app) {
     auto layout = HomeScreen::app_demo(state, (char *)app_name);
     SDL_Clay_RenderClayCommandsProxy(&state->render_data, &layout);
   }
+#endif
 
   SDL_RenderPresent(state->renderer);
 

@@ -22,21 +22,21 @@ FetchContent_Declare(
   sdl
   GIT_REPOSITORY https://github.com/libsdl-org/SDL/
   GIT_TAG        038a3806eb09432b6dd31b3c884ac236e44bb936
+  GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(sdl)
 
 set(SDLIMAGE_WEBP OFF)
+
 FetchContent_Declare(
   sdl_image
-  GIT_REPOSITORY https://github.com/libsdl-org/SDL_image
-  GIT_TAG        925c19db4d0bc9809fd3ac25c7e0ef771b668390
+  URL https://github.com/libsdl-org/SDL_image/releases/download/release-3.2.4/SDL3_image-3.2.4.tar.gz
 )
 FetchContent_MakeAvailable(sdl_image)
 
 FetchContent_Declare(
   sdl_ttf
-  GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
-  GIT_TAG        ffa54ca2ec6b89b4f6dc92ab113484cfa2ccc3a7
+  URL https://github.com/libsdl-org/SDL_ttf/releases/download/release-3.2.2/SDL3_ttf-3.2.2.tar.gz
 )
 FetchContent_MakeAvailable(sdl_ttf)
 
@@ -45,6 +45,7 @@ FetchContent_Declare(
   clay
   GIT_REPOSITORY https://github.com/nicbarker/clay
   GIT_TAG        281f961e3d7272e5627a7618aedddd70faf04668
+  GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(clay)
 
@@ -53,6 +54,7 @@ FetchContent_Declare(
   libt9
   GIT_REPOSITORY https://github.com/FoxMoss/libt9
   GIT_TAG        7307f13d2b0e1c1a33841da75926743019f3bbf6
+  GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(libt9)
 

@@ -75,30 +75,18 @@ HomeScreen::HomeScreen(ProgState *state,
                 {.internal_callbacks = {&HomeScreen::search_render,
                                         &HomeScreen::search_key_event}}};
   apps.push_back(search);
-  App settings = {"Settings",
-                  std::optional(IMG_LoadTexture(state->renderer, PUBLIC_FOLDER
-                                                "placeholder_app.png")),
-                  App::APP_EXTERNAL,
-                  {.external_path = "settings"}};
-  apps.push_back(settings);
   App editor = {"Editor",
                 std::optional(IMG_LoadTexture(state->renderer, PUBLIC_FOLDER
                                               "placeholder_app.png")),
                 App::APP_EXTERNAL,
-                {.external_path = "gedit"}};
+                {.external_path = "/usr/bin/gedit"}};
   apps.push_back(editor);
   App terminal = {"Terminal",
                   std::optional(IMG_LoadTexture(state->renderer, PUBLIC_FOLDER
                                                 "placeholder_app.png")),
                   App::APP_EXTERNAL,
-                  {.external_path = "xterm"}};
+                  {.external_path = "/usr/bin/xterm"}};
   apps.push_back(terminal);
-  App web_browser = {"Web",
-                     std::optional(IMG_LoadTexture(
-                         state->renderer, PUBLIC_FOLDER "placeholder_app.png")),
-                     App::APP_EXTERNAL,
-                     {.external_path = "ladybird"}};
-  apps.push_back(web_browser);
 
   app_name_root = trie_create_root();
   for (auto app : apps) {
