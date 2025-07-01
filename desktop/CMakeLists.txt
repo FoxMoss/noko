@@ -9,20 +9,30 @@ if (EMSCRIPTEN)
   target_compile_options(noko-desktop PRIVATE -DEMSCRIPTEN)
   target_link_options(noko-desktop PRIVATE --shell-file "${CMAKE_CURRENT_SOURCE_DIR}/../webport/index.html" --preload-file "${CMAKE_CURRENT_SOURCE_DIR}/../public@/" -sINITIAL_MEMORY=70254592)
   set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
-  set(SDLTTF_VENDORED ON)
   set(SDLIMAGE_VENDORED ON)
-  set(SDLIMAGE_AVIF OFF)	# disable formats we don't use to make the build faster and smaller.
-  set(SDLIMAGE_BMP OFF)
-  set(SDLIMAGE_JPEG OFF)
-  set(SDLIMAGE_WEBP OFF)
+  set(SDLTTF_VENDORED ON)
 endif()
 
+set(SDL_LIBC ON)
+set(SDL_TEST_LIBRARY OFF)
+set(SDL_TESTS OFF)
+set(SDLIMAGE_AVIF OFF)	# disable formats we don't use to make the build faster and smaller.
+set(SDLIMAGE_BMP OFF)
+set(SDLIMAGE_JPEG OFF)
+set(SDLIMAGE_WEBP OFF)
+set(SDLIMAGE_BACKEND_IMAGEIO OFF)
+set(SDLIMAGE_BACKEND_STB OFF)
+set(SDLIMAGE_DEPS_SHARED OFF)
+set(SDLIMAGE_RELOCATABLE ON)
+set(SDLIMAGE_SAMPLES OFF)
+set(SDLIMAGE_STRICT ON)
+set(SDLIMAGE_VENDORED OFF)
+set(SDLTTF_VENDORED OFF)
+set(SDLTTF_SAMPLES OFF)
 include(FetchContent)
 FetchContent_Declare(
   sdl
-  GIT_REPOSITORY https://github.com/libsdl-org/SDL/
-  GIT_TAG        038a3806eb09432b6dd31b3c884ac236e44bb936
-  GIT_SHALLOW 1
+  URL https://github.com/libsdl-org/SDL/releases/download/release-3.2.16/SDL3-3.2.16.tar.gz
 )
 FetchContent_MakeAvailable(sdl)
 
@@ -43,9 +53,7 @@ FetchContent_MakeAvailable(sdl_ttf)
 set(CLAY_INCLUDE_ALL_EXAMPLES OFF)
 FetchContent_Declare(
   clay
-  GIT_REPOSITORY https://github.com/nicbarker/clay
-  GIT_TAG        281f961e3d7272e5627a7618aedddd70faf04668
-  GIT_SHALLOW 1
+  URL https://github.com/nicbarker/clay/archive/refs/tags/v0.14.zip
 )
 FetchContent_MakeAvailable(clay)
 
@@ -53,7 +61,7 @@ set(BUILD_LIB ON)
 FetchContent_Declare(
   libt9
   GIT_REPOSITORY https://github.com/FoxMoss/libt9
-  GIT_TAG        7307f13d2b0e1c1a33841da75926743019f3bbf6
+  GIT_TAG        main
   GIT_SHALLOW 1
 )
 FetchContent_MakeAvailable(libt9)
