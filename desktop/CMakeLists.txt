@@ -13,9 +13,32 @@ if (EMSCRIPTEN)
   set(SDLTTF_VENDORED ON)
 endif()
 
+# Add a macro defining the projects font directory
+# This will avoid errors for the time being since otherwise you would need to 
+# be in the build directory every time you run noko-desktop
+target_compile_definitions(noko-desktop PUBLIC PUBLIC_FOLDER=\"${CMAKE_SOURCE_DIR}/public/\")
+
+# Try to find system-installed SDL3 components
+find_package(SDL3 QUIET)
+find_package(SDL3_image QUIET)
+find_package(SDL3_ttf QUIET)
+
+include(FetchContent)
+if (NOT SDL3_FOUND)
+message(STATUS "System SDL3 not found, fetching from source")
+# Im pretty sure this compile flag is for sdl and not the others, correct me if im wrong - bear
 set(SDL_LIBC ON)
 set(SDL_TEST_LIBRARY OFF)
 set(SDL_TESTS OFF)
+FetchContent_Declare(
+  sdl
+  URL https://github.com/libsdl-org/SDL/releases/download/release-3.2.16/SDL3-3.2.16.tar.gz
+)
+FetchContent_MakeAvailable(sdl)
+endif()
+
+if (NOT SDL3_image_FOUND)
+message(STATUS "System SDL3_image not found, fetching from source")
 set(SDLIMAGE_AVIF OFF)	# disable formats we don't use to make the build faster and smaller.
 set(SDLIMAGE_BMP OFF)
 set(SDLIMAGE_JPEG OFF)
@@ -27,15 +50,6 @@ set(SDLIMAGE_RELOCATABLE ON)
 set(SDLIMAGE_SAMPLES OFF)
 set(SDLIMAGE_STRICT ON)
 set(SDLIMAGE_VENDORED OFF)
-set(SDLTTF_VENDORED OFF)
-set(SDLTTF_SAMPLES OFF)
-include(FetchContent)
-FetchContent_Declare(
-  sdl
-  URL https://github.com/libsdl-org/SDL/releases/download/release-3.2.16/SDL3-3.2.16.tar.gz
-)
-FetchContent_MakeAvailable(sdl)
-
 set(SDLIMAGE_WEBP OFF)
 
 FetchContent_Declare(
@@ -43,13 +57,20 @@ FetchContent_Declare(
   URL https://github.com/libsdl-org/SDL_image/releases/download/release-3.2.4/SDL3_image-3.2.4.tar.gz
 )
 FetchContent_MakeAvailable(sdl_image)
+endif()
 
+if (NOT SDL3_ttf_FOUND)
+message(STATUS "System SDL3_ttf not found, fetching from source")
+set(SDLTTF_VENDORED OFF)
+set(SDLTTF_SAMPLES OFF)
 FetchContent_Declare(
   sdl_ttf
   URL https://github.com/libsdl-org/SDL_ttf/releases/download/release-3.2.2/SDL3_ttf-3.2.2.tar.gz
 )
 FetchContent_MakeAvailable(sdl_ttf)
+endif()
 
+# Always download clay and libt9 since they are small & not packaged
 set(CLAY_INCLUDE_ALL_EXAMPLES OFF)
 FetchContent_Declare(
   clay

@@ -8,7 +8,8 @@ class HomeScreen;
 #include "sdl_clay.h"
 
 #ifndef EMSCRIPTEN
-#define PUBLIC_FOLDER "../public/"
+// Ive replaced this with a cmake injected macro.
+//#define PUBLIC_FOLDER "../public/"
 #else
 #define PUBLIC_FOLDER "./"
 #endif

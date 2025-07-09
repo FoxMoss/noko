@@ -85,7 +85,7 @@ HomeScreen::HomeScreen(ProgState *state,
                   std::optional(IMG_LoadTexture(state->renderer, PUBLIC_FOLDER
                                                 "placeholder_app.png")),
                   App::APP_EXTERNAL,
-                  {.external_path = "/usr/bin/xterm"}};
+                  {.external_path = "/usr/bin/kitty"}};
   apps.push_back(terminal);
 
   app_name_root = trie_create_root();
