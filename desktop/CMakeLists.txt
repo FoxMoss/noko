@@ -66,7 +66,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(libt9)
 
-target_link_libraries(noko-desktop PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf t9)
+FetchContent_Declare(
+  inipp 
+  URL https://github.com/mcmtroffaes/inipp/archive/refs/tags/1.0.13.tar.gz
+)
+FetchContent_MakeAvailable(inipp)
+
+
+target_link_libraries(noko-desktop PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf t9 inipp::inipp)
 target_include_directories(noko-desktop PRIVATE ${clay_SOURCE_DIR})
 
 add_custom_command(TARGET noko-desktop POST_BUILD
