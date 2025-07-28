@@ -191,6 +191,7 @@ void HomeScreen::search_key_event(HomeScreen *self, SDL_Event *event) {
     if (val.has_value()) {
       self->subrender = {};
       self->subkey_event = {};
+      self->search_index = 0;
       self->search_cursor = 0;
       self->search_text[0] = 0;
       switch (val.value().type) {
@@ -382,11 +383,14 @@ Clay_RenderCommandArray HomeScreen::search_layout(HomeScreen *self,
         search_text = CLAY_STRING("Search via T9...");
       }
 
-      CLAY_TEXT(search_text, CLAY_TEXT_CONFIG({
-                                 .textColor = {255, 255, 255, 255},
-                                 .fontId = 0,
-                                 .fontSize = (uint16_t)(font_size),
-                             }));
+      CLAY_TEXT(
+          search_text,
+          CLAY_TEXT_CONFIG({
+              .textColor = {255, 255, 255,
+                            (float)(self->search_cursor == 0 ? 200 : 255)},
+              .fontId = 0,
+              .fontSize = (uint16_t)(font_size),
+          }));
 
       TrieNode *node =
           trie_fillout_path(self->app_name_root, self->search_text);
