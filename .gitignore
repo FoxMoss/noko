@@ -1,3 +1,6 @@
 build/
 compile_commands.json
 .cache/
+
+# This will store local binaries if you choose to use vcpkg
+vcpkg_installed/

@@ -83,7 +83,7 @@ HomeScreen::HomeScreen(ProgState *state,
   App terminal("Terminal",
                std::optional(IMG_LoadTexture(state->renderer, PUBLIC_FOLDER
                                              "placeholder_app.png")),
-               "/usr/bin/xterm");
+               "/usr/bin/kitty");
   apps.push_back(terminal);
 
   read_desktop_apps_in(state, "/usr/share/applications/");
