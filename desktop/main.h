@@ -24,3 +24,5 @@ struct ProgState {
   int width;
   int height;
 };
+Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
+                                Clay_TextElementConfig *config, void *userData);

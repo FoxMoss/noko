@@ -123,28 +123,37 @@ std::optional<App> HomeScreen::get_first_child(HomeScreen *self,
 }
 void HomeScreen::search_key_event(HomeScreen *self, SDL_Event *event) {
   char new_char = 0;
+
+  if (event->key.key > SDLK_KP_DIVIDE && event->key.key < SDLK_KP_PERIOD) {
 #ifndef FLIPED_KP
-  if (event->key.key == SDLK_KP_7)
-    new_char = '1';
-  else if (event->key.key == SDLK_KP_8)
-    new_char = '2';
-  else if (event->key.key == SDLK_KP_9)
-    new_char = '3';
-  else if (event->key.key == SDLK_KP_4)
-    new_char = '4';
-  else if (event->key.key == SDLK_KP_5)
-    new_char = '5';
-  else if (event->key.key == SDLK_KP_6)
-    new_char = '6';
-  else if (event->key.key == SDLK_KP_1)
-    new_char = '7';
-  else if (event->key.key == SDLK_KP_2)
-    new_char = '8';
-  else if (event->key.key == SDLK_KP_3)
-    new_char = '9';
+    if (event->key.key == SDLK_KP_7)
+      new_char = '1';
+    else if (event->key.key == SDLK_KP_8)
+      new_char = '2';
+    else if (event->key.key == SDLK_KP_9)
+      new_char = '3';
+    else if (event->key.key == SDLK_KP_4)
+      new_char = '4';
+    else if (event->key.key == SDLK_KP_5)
+      new_char = '5';
+    else if (event->key.key == SDLK_KP_6)
+      new_char = '6';
+    else if (event->key.key == SDLK_KP_1)
+      new_char = '7';
+    else if (event->key.key == SDLK_KP_2)
+      new_char = '8';
+    else if (event->key.key == SDLK_KP_3)
+      new_char = '9';
 #else
-  new_char = event->key.key - SDLK_KP_1 + '1';
+    new_char = event->key.key - SDLK_KP_1 + '1';
 #endif
+  } else {
+    new_char = event->key.key - SDLK_1 + '1';
+  }
+  if (new_char < '1' || '9' < new_char) {
+    new_char = 0;
+  }
+
   if (new_char != 0) {
     self->search_text[self->search_cursor] = new_char;
     if (self->search_cursor < 255)
@@ -152,7 +161,7 @@ void HomeScreen::search_key_event(HomeScreen *self, SDL_Event *event) {
     self->search_text[self->search_cursor] = 0;
   }
 
-  if (event->key.key == SDLK_KP_MINUS) {
+  if (event->key.key == SDLK_KP_MINUS || event->key.key == SDLK_MINUS) {
     if (self->search_cursor != 0)
       self->search_cursor--;
     self->search_text[self->search_cursor] = 0;
@@ -189,38 +198,46 @@ void HomeScreen::key_event(SDL_Event *event) {
 
   if (subkey_event.has_value()) {
     subkey_event.value()(this, event);
-    if (event->key.key != SDLK_KP_PLUS)
+    if (event->key.key != SDLK_KP_PLUS || SDLK_PLUS)
       return;
     subkey_event = {};
     subrender = {};
     return;
   }
 
-  size_t real_i = 0;
-#ifndef FLIPED_KP
-  if (event->key.key == SDLK_KP_7)
-    real_i = 0;
-  else if (event->key.key == SDLK_KP_8)
-    real_i = 1;
-  else if (event->key.key == SDLK_KP_9)
-    real_i = 2;
-  else if (event->key.key == SDLK_KP_4)
-    real_i = 3;
-  else if (event->key.key == SDLK_KP_5)
-    real_i = 4;
-  else if (event->key.key == SDLK_KP_6)
-    real_i = 5;
-  else if (event->key.key == SDLK_KP_1)
-    real_i = 6;
-  else if (event->key.key == SDLK_KP_2)
-    real_i = 7;
-  else if (event->key.key == SDLK_KP_3)
-    real_i = 8;
-  else
+  if ((event->key.key < SDLK_0 && event->key.key > SDLK_1) ||
+      (event->key.key < SDLK_KP_DIVIDE && event->key.key > SDLK_KP_PERIOD))
     return;
+
+  size_t real_i = 0;
+  if (event->key.key > SDLK_KP_DIVIDE && event->key.key < SDLK_KP_PERIOD) {
+#ifndef FLIPED_KP
+    if (event->key.key == SDLK_KP_7)
+      real_i = 0;
+    else if (event->key.key == SDLK_KP_8)
+      real_i = 1;
+    else if (event->key.key == SDLK_KP_9)
+      real_i = 2;
+    else if (event->key.key == SDLK_KP_4)
+      real_i = 3;
+    else if (event->key.key == SDLK_KP_5)
+      real_i = 4;
+    else if (event->key.key == SDLK_KP_6)
+      real_i = 5;
+    else if (event->key.key == SDLK_KP_1)
+      real_i = 6;
+    else if (event->key.key == SDLK_KP_2)
+      real_i = 7;
+    else if (event->key.key == SDLK_KP_3)
+      real_i = 8;
+    else
+      return;
 #else
-  real_i = event->key.key - SDLK_KP_1;
+    real_i = event->key.key - SDLK_KP_1;
 #endif
+  } else {
+    real_i = event->key.key - SDLK_1;
+  }
 
   if (apps.size() <= real_i)
     return;
@@ -262,7 +279,7 @@ void HomeScreen::traverse_apps(HomeScreen *self, ProgState *state,
     CLAY({.id = CLAY_IDI("App", *index),
           .layout =
               {
-                  .sizing = {.width = CLAY_SIZING_FIT(0),
+                  .sizing = {.width = CLAY_SIZING_GROW(0),
                              .height = CLAY_SIZING_FIT(0)},
                   .padding = CLAY_PADDING_ALL(
                       (uint16_t)min((float)state->width / 80, 16)),
@@ -354,7 +371,7 @@ Clay_RenderCommandArray HomeScreen::search_layout(HomeScreen *self,
       size_t index = 0;
       CLAY({.id = CLAY_ID("AppList"),
             .layout = {
-                .sizing = {.width = CLAY_SIZING_FIT(0),
+                .sizing = {.width = CLAY_SIZING_GROW(0),
                            .height = CLAY_SIZING_FIT(0)},
                 .padding = CLAY_PADDING_ALL(10),
                 .childGap = 10,
@@ -427,12 +444,20 @@ Clay_RenderCommandArray HomeScreen::generate_layout(ProgState *state) {
   Clay_Sizing layoutExpand = {.width = {(float)state->width},
                               .height = {(float)state->height}};
   float max_strlen = 0;
+  float font_size = (float)state->height / 25;
   for (auto app : apps) {
-    if (strlen(app.name) > max_strlen) {
-      max_strlen = strlen(app.name);
+    int width, height;
+    TTF_SetFontSize(state->lato_regular, font_size);
+    if (!TTF_GetStringSize(state->lato_regular, app.name, 0, &width, &height)) {
+      SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to measure text: %s",
+                   SDL_GetError());
+    }
+
+    if (width > max_strlen) {
+      max_strlen = width;
     }
   }
-  float font_size = (float)state->height / 25;
+
   size_t index = 0;
   CLAY({.id = CLAY_ID("OuterContainer"),
         .layout = {
@@ -447,6 +472,8 @@ Clay_RenderCommandArray HomeScreen::generate_layout(ProgState *state) {
             {
                 .sizing = {.width = CLAY_SIZING_FIT(0),
                            .height = CLAY_SIZING_FIT(0)},
+                .padding = CLAY_PADDING_ALL(
+                    (uint16_t)min((float)state->width / 40, 16)),
                 .layoutDirection = CLAY_TOP_TO_BOTTOM,
 
             },
@@ -463,17 +490,17 @@ Clay_RenderCommandArray HomeScreen::generate_layout(ProgState *state) {
         }) {
           for (size_t col = 0; col < 3; col++) {
 
-            CLAY({.id = CLAY_IDI("App", index),
-                  .layout = {
-                      .sizing = {.width = CLAY_SIZING_FIXED(
-                                     (float)(font_size * 0.6 * max_strlen)),
-                                 .height = CLAY_SIZING_GROW(0)},
-                      .padding = CLAY_PADDING_ALL(
-                          (uint16_t)min((float)state->width / 40, 16)),
-                      .childAlignment = {.x = CLAY_ALIGN_X_CENTER,
-                                         .y = CLAY_ALIGN_Y_CENTER},
-                      .layoutDirection = CLAY_TOP_TO_BOTTOM,
-                  }}) {
+            CLAY(
+                {.id = CLAY_IDI("App", index),
+                 .layout = {
+                     .sizing = {.width = CLAY_SIZING_FIXED((float)(max_strlen)),
+                                .height = CLAY_SIZING_GROW(0)},
+                     .padding = CLAY_PADDING_ALL(
+                         (uint16_t)min((float)state->width / 40, 16)),
+                     .childAlignment = {.x = CLAY_ALIGN_X_CENTER,
+                                        .y = CLAY_ALIGN_Y_CENTER},
+                     .layoutDirection = CLAY_TOP_TO_BOTTOM,
+                 }}) {
               if (index < apps.size()) {
                 App app = apps[index];
 

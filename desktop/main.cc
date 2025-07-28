@@ -29,9 +29,9 @@
 
 #define FONT_SIZE 20
 
-static inline Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
-                                              Clay_TextElementConfig *config,
-                                              void *userData) {
+Clay_Dimensions SDL_MeasureText(Clay_StringSlice text,
+                                Clay_TextElementConfig *config,
+                                void *userData) {
   TTF_Font **fonts = (TTF_Font **)userData;
   TTF_Font *font = fonts[config->fontId];
   int width, height;
@@ -74,8 +74,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
 
   ProgState *state = (ProgState *)SDL_calloc(1, sizeof(ProgState));
   *appstate = state;
-  state->width = 240;
-  state->height = 320;
+  state->width = 480;
+  state->height = 480;
 
   if (!SDL_Init(SDL_INIT_VIDEO)) {
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
